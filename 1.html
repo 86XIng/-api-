@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<style type="text/css">
+		body, html,#allmap {width: 100%;height: 100%;overflow: hidden;margin:0;font-family:"微软雅黑";}
+    </style>
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=V98k7e0QxtINTGM4KxxUZk5M1CuYMcVZ"></script>
+    <script src="https://cdn.bootcss.com/vue/2.5.16/vue.js"></script>
+	<title>测距</title>
+</head>
+<body>
+    <div id="allmap" style="display:none;"></div>
+    <table class="layui-hide" id="test" lay-filter="test"></table>
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    </script>
+<script src="layui/layui.js"></script>
+</body>
+</html>
+<script type="text/javascript">
+    // 百度地图API功能
+    var adds = ['北京','天津','石家庄','唐山','秦皇岛','邯郸','保定','太原','大同市','阳泉','长治','临汾','呼和浩特','包头','赤峰','鄂尔多斯','沈阳','大连','鞍山','抚顺','本溪','锦州','长春','吉林','哈尔滨','齐齐哈尔','大庆','牡丹江','南京','无锡','徐州','常州','苏州','南通','连云港','盐城','扬州','杭州','宁波','温州','嘉兴','湖州','绍兴','台州','合肥','芜湖','马鞍山','福州','厦门','泉州','南昌','九江','济南','青岛','淄博','枣庄','烟台','济宁','泰安','威海','日照','郑州','开封','洛阳','平顶山','安阳','焦作','武汉','宜昌','荆州市','长沙','株洲','湘潭','岳阳','常德','张家界','广州','韶关','深圳','珠海','汕头','佛山','湛江','东莞','中山市','南宁','柳州','桂林','北海','上海','重庆','成都','攀枝花','泸州','绵阳','宜宾','贵阳','遵义','昆明','曲靖','西安市','铜川','宝鸡','咸阳','延安','兰州','金昌','西宁','银川','石嘴山','乌鲁木齐','克拉玛依']
+    var lan = [116.395645,117.210813,114.522082,118.183451,119.604368,114.482694,115.49481,112.550864,113.290509,113.569238,113.120292,111.538788,111.660351,109.846239,118.930761,109.993706,123.432791,121.593478,123.007763,123.92982,123.778062,121.147749,125.313642,126.564544,126.657717,123.987289,125.02184,129.608035,118.778074,120.305456,117.188107,119.981861,120.619907,120.873801,119.173872,120.148872,119.427778,120.219375,121.579006,120.690635,120.760428,120.137243,120.592467,121.440613,117.282699,118.384108,118.515882,119.330221,118.103886,118.600362,115.893528,115.999848,117.024967,120.384428,118.059134,117.279305,121.309555,116.600798,117.089415,122.093958,119.50718,113.649644,114.351642,112.447525,113.300849,114.351807,113.211836,114.3162,111.310981,112.241866,112.979353,113.131695,112.935556,113.146196,111.653718,110.48162,113.30765,113.594461,114.025974,113.562447,116.72865,113.134026,110.365067,113.763434,113.42206,108.297234,109.422402,110.26092,109.122628,121.487899,106.530635,104.067923,101.722423,105.44397,104.705519,104.633019,106.709177,106.93126,102.714601,103.782539,108.953098,108.968067,107.170645,108.707509,109.50051,103.823305,102.208126,101.767921,106.206479,106.379337,87.564988,84.92699]
+    var lon = [39.929986,39.14393,38.048958,39.650531,39.945462,36.609308,38.886565,37.890277,40.113744,37.869529,36.201664,36.099745,40.828319,40.647119,42.297112,39.81649,41.808645,38.94871,41.118744,41.877304,41.325838,41.130879,43.898338,43.871988,45.773225,47.3477,46.596709,44.588521,32.057236,31.570037,34.271553,31.771397,31.317987,32.014665,34.601549,33.379862,32.408505,30.259244,29.885259,28.002838,30.773992,30.877925,30.002365,28.668283,31.866942,31.36602,31.688528,26.047125,24.489231,24.901652,28.689578,29.71964,36.682785,36.105215,36.804685,34.807883,37.536562,35.402122,36.188078,37.528787,35.420225,34.75661,34.801854,34.657368,33.745301,36.110267,35.234608,30.581084,30.732758,30.332591,28.213478,27.827433,27.835095,29.378007,29.012149,29.124889,23.120049,24.80296,22.546054,22.256915,23.383908,23.035095,21.257463,23.043024,22.545178,22.806493,24.329053,25.262901,21.472718,31.249162,29.544606,30.679943,26.587571,28.89593,31.504701,28.769675,26.629907,27.699961,25.049153,25.520758,34.2778,34.908368,34.364081,34.345373,36.60332,36.064226,38.516072,36.640739,38.502621,39.020223,43.84038,45.203919]
+    var json = []
+    var k =0;
+    for(var i =0 ;i<112;i++){
+        var map = new BMap.Map("allmap");
+        map.centerAndZoom("重庆",12);  
+        var pointA = new BMap.Point(lan[i],lon[i]);
+        for(var j = i+1;j<112;j++){
+            var pointB = new BMap.Point(lan[j],lon[j]); 
+            json[k]={};
+            json[k].name1 = adds[i];
+            json[k].name2 = adds[j]
+            json[k].distance = (map.getDistance(pointA,pointB)).toFixed(2);
+            // document.write(json[k].name+':'+json[k].distance);
+            // document.write('<br/>')
+            k++;
+        }
+        if(i==111){
+            var datas = JSON.stringify(json);
+            console.log(datas)
+            layui.use('table', function () {
+                var table = layui.table;
+                table.render({
+                    elem: '#test'
+                    , title: '用户数据表'
+                    , toolbar: 'default'
+                    , cols: [[
+                        {type:'checkbox'},
+                        { field: 'name1', width: 80, title: '城市1', sort: true, totalRowText: '合计' },
+                        { field: 'name2', title: '城市2', sort: true },
+                        { field: 'distance', width: 100, title: '距离(单位m)', sort: true, totalRow: true },
+                        { fixed: 'right', title: '操作', toolbar: '#barDemo', width: 150 }
+                    ]]
+                    , data: datas
+                    , page: true
+                });
+                table.on('toolbar(test)', function (obj) {
+                    var checkStatus = table.checkStatus(obj.config.id)
+                    , data = checkStatus.data; //获取选中的数据
+                    switch (obj.event) {
+                        case 'add':
+                            layer.msg('添加');
+                            break;
+                        case 'update':
+                            if (data.length === 0) {
+                                layer.msg('请选择一行');
+                            } else if (data.length > 1) {
+                                layer.msg('只能同时编辑一个');
+                            } else {
+                                layer.alert('编辑 [id]：' + checkStatus.data[0].id);
+                            }
+                            break;
+                        case 'delete':
+                            if (data.length === 0) {
+                                layer.msg('请选择一行');
+                            } else {
+                                layer.msg('删除');
+                            }
+                            break;
+                    };
+                });
+                table.on('row(test)', function (obj) {
+                    var data = obj.data;
+                    console.log(data);
+                    layer.open({
+                        title: '课程描述',
+                        type: 2,
+                        area: ['800px', '600px'],
+                        content: './change_course.aspx?course_id=' + data.课程号,
+                        btn: '修改',
+                        yes: function () {
+                            layer.closeAll();
+                            console.log(parent);
+                            parent.location = '../change_course.aspx?course_id=' + data.课程号;
+                        }
+                    });
+
+                    //标注选中样式
+                    obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+                });
+            });
+        }    
+    }
+</script>
